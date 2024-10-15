@@ -1,0 +1,76 @@
+import pandas as pd
+import re
+
+# Load dataset
+df = pd.read_csv('customer_reviews.csv')
+
+# Print the first few rows of the dataset
+print("Original Dataset:")
+print(df.head())
+
+# Trim leading and trailing whitespaces
+print("\nTrimming leading and trailing whitespaces...")
+df['review'] = df['review'].str.strip()
+print(df.head())
+
+# Replace multiple whitespaces with a single space
+print("\nReplacing multiple whitespaces with a single space...")
+df['review'] = df['review'].str.replace('\s+', ' ')
+print(df.head())
+
+# Replace a specific word with another
+print("\nReplacing a specific word with another...")
+df['review'] = df['review'].str.replace('good', 'great')
+print(df.head())
+
+# Extract a substring (e.g., the first 10 characters)
+print("\nExtracting a substring (first 10 characters)...")
+df['review_substring'] = df['review'].str[:10]
+print(df.head())
+
+# Extract a substring (e.g., the last 10 characters)
+print("\nExtracting a substring (last 10 characters)...")
+df['review_substring_end'] = df['review'].str[-10:]
+print(df.head())
+
+# Split a string into multiple columns (e.g., split by commas)
+print("\nSplitting a string into multiple columns (split by commas)...")
+df[['review_col1', 'review_col2', 'review_col3']] = df['review'].str.split(',', expand=True)
+print(df.head())
+
+# Apply regular expressions to clean or extract specific information from text fields
+print("\nApplying regular expressions to clean or extract specific information from text fields...")
+
+# Remove special characters and numbers from the text
+print("\nRemoving special characters and numbers from the text...")
+df['review'] = df['review'].apply(lambda x: re.sub('[^a-zA-Z\s]', '', x))
+print(df.head())
+
+# Extract email addresses from the text
+print("\nExtracting email addresses from the text...")
+df['email'] = df['review'].apply(lambda x: re.findall(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', x))
+print(df.head())
+
+# Extract URLs from the text
+print("\nExtracting URLs from the text...")
+df['url'] = df['review'].apply(lambda x: re.findall(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', x))
+print(df.head())
+
+# Extract phone numbers from the text
+print("\nExtracting phone numbers from the text...")
+df['phone'] = df['review'].apply(lambda x: re.findall(r'\d{3}[-\s]??\d{3}[-\s]??\d{4}|\d{3}[-\s]??\d{4}', x))
+print(df.head())
+
+# Extract dates from the text
+print("\nExtracting dates from the text...")
+df['date'] = df['review'].apply(lambda x: re.findall(r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b', x))
+print(df.head())
+
+# Extract times from the text
+print("\nExtracting times from the text...")
+df['time'] = df['review'].apply(lambda x: re.findall(r'\b\d{1,2}:\d{1,2} [APap][mM]\b', x))
+print(df.head())
+
+# Print the resulting dataset
+print("\nFinal Dataset:")
+print(df.head())
